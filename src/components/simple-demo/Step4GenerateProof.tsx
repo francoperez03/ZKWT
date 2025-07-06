@@ -9,8 +9,8 @@ import type { SimpleStepProps } from './types';
 import { getIdentitySecret } from './utils';
 
 const Step4GenerateProof: React.FC<SimpleStepProps> = ({ state, onStateChange, onError }) => {
-  const [signal, setSignal] = useState<string>('Voto_A');
-  const [externalNullifier, setExternalNullifier] = useState<string>('eleccion_presidente_2024');
+  const [signal, setSignal] = useState<string>('Vot_A');
+  const [externalNullifier, setExternalNullifier] = useState<string>('Nullifier_test');
   const [isGeneratingProof, setIsGeneratingProof] = useState(false);
   const [parametersView, setParametersView] = useState<string>('');
 
