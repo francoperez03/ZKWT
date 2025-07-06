@@ -153,4 +153,4 @@ Este proyecto es de código abierto y está disponible bajo la licencia MIT.
 
 ---
 
-**Desarrollado para EKOParty 2025** 🚀
+**Desarrollado por @crypto_dev_1 2025** 🚀
