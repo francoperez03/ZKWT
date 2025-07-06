@@ -4,13 +4,14 @@ import {
   Step2CreateIdentity, 
   Step3AddToGroup, 
   Step4GenerateProof,
+  Step5VerifyProof,
   ControlButtons,
   ErrorDisplay
 } from './index';
 import { useSimpleDemo } from './useSimpleDemo';
 
 const SimpleDemoRefactored: React.FC = () => {
-  const { state, errorMessage, updateState, handleError, clearError } = useSimpleDemo();
+  const { state, errorMessage, updateState, handleError, clearError, resyncState, clearState } = useSimpleDemo();
 
   const stepProps = {
     state,
@@ -35,6 +36,7 @@ const SimpleDemoRefactored: React.FC = () => {
         <Step2CreateIdentity {...stepProps} />
         <Step3AddToGroup {...stepProps} />
         <Step4GenerateProof {...stepProps} />
+        <Step5VerifyProof {...stepProps} />
       </div>
 
       {/* Campo de Error - Ubicación prominente */}
@@ -49,7 +51,11 @@ const SimpleDemoRefactored: React.FC = () => {
 
       {/* Botones de Control */}
       <div className="mt-8 pt-6 border-t border-gray-200">
-        <ControlButtons {...stepProps} />
+        <ControlButtons 
+          {...stepProps} 
+          onResync={resyncState}
+          onClear={clearState}
+        />
       </div>
     </div>
   );

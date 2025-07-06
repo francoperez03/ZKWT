@@ -9,8 +9,21 @@ import type { SimpleStepProps } from './types';
 import { getIdentitySecret } from './utils';
 
 const Step4GenerateProof: React.FC<SimpleStepProps> = ({ state, onStateChange, onError }) => {
-  const [signal, setSignal] = useState<string>('Vot_A');
-  const [externalNullifier, setExternalNullifier] = useState<string>('Nullifier_test');
+  // Usar los valores del estado o valores por defecto
+  const signal = state.signal || 'Voto_A';
+  const externalNullifier = state.externalNullifier || 'eleccion_presidente_2024';
+  
+  // Función para actualizar signal en el estado
+  const setSignal = (newSignal: string) => {
+    const newState = { ...state, signal: newSignal };
+    onStateChange(newState);
+  };
+  
+  // Función para actualizar externalNullifier en el estado
+  const setExternalNullifier = (newNullifier: string) => {
+    const newState = { ...state, externalNullifier: newNullifier };
+    onStateChange(newState);
+  };
   const [isGeneratingProof, setIsGeneratingProof] = useState(false);
   const [parametersView, setParametersView] = useState<string>('');
 
@@ -102,7 +115,10 @@ ${groupMembers}
       console.log(`✅ Prueba ZK generada exitosamente con ${libraryName}:`, proof);
       const newState = { 
         ...state, 
-        proof: `Prueba ZK generada exitosamente con ${libraryName}` 
+        proof: proof, // Almacenar la prueba completa
+        signal: signal, // Almacenar el signal usado
+        externalNullifier: externalNullifier, // Almacenar el nullifier usado
+        proofVerified: null // Resetear verificación
       };
       onStateChange(newState);
     } catch (error) {
@@ -242,9 +258,10 @@ Posibles causas:
         <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded">
           <h4 className="font-semibold mb-2 text-green-800">Prueba ZK Generada ✓</h4>
           <div className="text-sm space-y-2 text-green-800">
-            <div><strong>Signal:</strong> {signal}</div>
-            <div><strong>Nullifier:</strong> {externalNullifier}</div>
-            <div><strong>Resultado:</strong> {state.proof}</div>
+            <div><strong>Signal:</strong> {state.signal}</div>
+            <div><strong>Nullifier:</strong> {state.externalNullifier}</div>
+            <div><strong>Merkle Root:</strong> {state.proof.merkleTreeRoot?.slice(0, 20)}...</div>
+            <div><strong>Nullifier Hash:</strong> {state.proof.nullifier?.slice(0, 20)}...</div>
             <div className="text-xs text-gray-600">
               La prueba demuestra que tu identidad pertenece al grupo sin revelar cuál es.
             </div>

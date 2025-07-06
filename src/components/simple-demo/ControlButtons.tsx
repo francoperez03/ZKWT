@@ -1,9 +1,25 @@
 import React from 'react';
 import type { SimpleStepProps } from './types';
 
-const ControlButtons: React.FC<SimpleStepProps> = ({ state, onStateChange, onError }) => {
+interface ControlButtonsProps extends SimpleStepProps {
+  onResync?: () => void;
+  onClear?: () => void;
+}
+
+const ControlButtons: React.FC<ControlButtonsProps> = ({ 
+  state, 
+  onStateChange, 
+  onError, 
+  onResync, 
+  onClear 
+}) => {
   // Re-sincronizar identidad con grupo
   const resyncIdentity = () => {
+    if (onResync) {
+      onResync();
+      return;
+    }
+    
     if (!state.group || !state.identity) return;
     
     const identityInGroup = state.group.members.some(
@@ -15,18 +31,31 @@ const ControlButtons: React.FC<SimpleStepProps> = ({ state, onStateChange, onErr
       state.group.addMember(state.identity.commitment);
     }
     
-    const newState = { ...state, isMember: true, proof: null };
+    const newState = { 
+      ...state, 
+      isMember: true, 
+      proof: null, 
+      proofVerified: null 
+    };
     onStateChange(newState);
     onError(''); // Limpiar errores
   };
 
   // Limpiar todo
   const clearAll = () => {
+    if (onClear) {
+      onClear();
+      return;
+    }
+    
     const emptyState = {
       group: null,
       identity: null,
       isMember: false,
-      proof: null
+      proof: null,
+      proofVerified: null,
+      signal: 'Voto_A',
+      externalNullifier: 'eleccion_presidente_2024'
     };
     onStateChange(emptyState);
     localStorage.removeItem('simple-demo-state');
@@ -39,7 +68,7 @@ const ControlButtons: React.FC<SimpleStepProps> = ({ state, onStateChange, onErr
       {state.group && state.identity && (
         <button
           onClick={resyncIdentity}
-          className="w-full py-2 px-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+          className="w-full py-2 px-4 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors"
         >
           🔄 Re-sincronizar Identidad con Grupo
         </button>
@@ -48,9 +77,9 @@ const ControlButtons: React.FC<SimpleStepProps> = ({ state, onStateChange, onErr
       {/* Botón de Limpiar */}
       <button
         onClick={clearAll}
-        className="w-full py-2 px-4 bg-red-500 text-white rounded hover:bg-red-600"
+        className="w-full py-2 px-4 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
       >
-        Limpiar Todo
+        🗑️ Limpiar Todo
       </button>
     </div>
   );

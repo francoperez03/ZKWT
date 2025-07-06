@@ -21,21 +21,19 @@ export const saveState = (state: SimpleState) => {
     } : null,
     identity: state.identity ? getIdentitySecret(state.identity) : null,
     isMember: state.isMember,
-    proof: state.proof
+    proof: state.proof,
+    signal: state.signal,
+    externalNullifier: state.externalNullifier
+    // No guardar proofVerified ya que se debe verificar de nuevo al cargar
   };
   localStorage.setItem('simple-demo-state', JSON.stringify(stateToSave));
 };
 
 // Cargar estado desde localStorage
-export const loadState = (): SimpleState => {
+export const loadState = (): SimpleState | null => {
   const savedState = localStorage.getItem('simple-demo-state');
   if (!savedState) {
-    return {
-      group: null,
-      identity: null,
-      isMember: false,
-      proof: null
-    };
+    return null;
   }
 
   try {
@@ -44,7 +42,10 @@ export const loadState = (): SimpleState => {
       group: parsed.group ? new Group(parsed.group.members.map(BigInt)) : null,
       identity: parsed.identity ? new Identity(parsed.identity) : null,
       isMember: parsed.isMember || false,
-      proof: parsed.proof || null
+      proof: parsed.proof || null,
+      proofVerified: null, // Siempre null al cargar, debe verificarse de nuevo
+      signal: parsed.signal || 'Voto_A',
+      externalNullifier: parsed.externalNullifier || 'eleccion_presidente_2024'
     };
     
     // Verificar y sincronizar la membresía después de cargar
@@ -62,11 +63,6 @@ export const loadState = (): SimpleState => {
     return loadedState;
   } catch (error) {
     console.error('Error loading simple demo state:', error);
-    return {
-      group: null,
-      identity: null,
-      isMember: false,
-      proof: null
-    };
+    return null;
   }
 }; 

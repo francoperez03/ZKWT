@@ -1,65 +1,71 @@
 import { useState, useEffect } from 'react';
-import { Group } from '@semaphore-protocol/group';
-import { Identity } from '@semaphore-protocol/identity';
 import type { SimpleState } from './types';
-import { saveState } from './utils';
+import { saveState, loadState } from './utils';
+
+const initialState: SimpleState = {
+  group: null,
+  identity: null,
+  isMember: false,
+  proof: null,
+  proofVerified: null,
+  signal: 'Voto_A',
+  externalNullifier: 'eleccion_presidente_2024'
+};
 
 export const useSimpleDemo = () => {
-  const [state, setState] = useState<SimpleState>({
-    group: null,
-    identity: null,
-    isMember: false,
-    proof: null
-  });
-  
+  const [state, setState] = useState<SimpleState>(initialState);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  // Cargar estado desde localStorage al iniciar
+  // Cargar estado desde localStorage al inicializar
   useEffect(() => {
-    const savedState = localStorage.getItem('simple-demo-state');
+    const savedState = loadState();
     if (savedState) {
-      try {
-        const parsed = JSON.parse(savedState);
-        const loadedState: SimpleState = {
-          group: parsed.group ? new Group(parsed.group.members.map(BigInt)) : null,
-          identity: parsed.identity ? new Identity(parsed.identity) : null,
-          isMember: parsed.isMember || false,
-          proof: parsed.proof || null
-        };
-        
-        // Verificar y sincronizar la membresía después de cargar
-        if (loadedState.group && loadedState.identity && loadedState.isMember) {
-          const identityInGroup = loadedState.group.members.some(
-            member => member.toString() === loadedState.identity!.commitment.toString()
-          );
-          
-          if (!identityInGroup) {
-            // Si dice que es miembro pero no está en el grupo, agregarlo
-            loadedState.group.addMember(loadedState.identity.commitment);
-          }
-        }
-        
-        setState(loadedState);
-      } catch (error) {
-        console.error('Error loading simple demo state:', error);
-      }
+      setState(prevState => ({
+        ...prevState,
+        ...savedState,
+        // Resetear campos de verificación al cargar
+        proofVerified: null
+      }));
     }
   }, []);
 
-  // Función para actualizar el estado y guardarlo
+  // Guardar estado en localStorage cuando cambie
+  useEffect(() => {
+    if (state.group || state.identity) {
+      saveState(state);
+    }
+  }, [state]);
+
   const updateState = (newState: SimpleState) => {
     setState(newState);
-    saveState(newState);
   };
 
-  // Función para manejar errores
   const handleError = (error: string) => {
     setErrorMessage(error);
   };
 
-  // Función para limpiar errores
   const clearError = () => {
     setErrorMessage('');
+  };
+
+  const resyncState = () => {
+    const savedState = loadState();
+    if (savedState) {
+      setState(prevState => ({
+        ...prevState,
+        ...savedState,
+        // Resetear verificación al resincronizar
+        proofVerified: null
+      }));
+      console.log('Estado resincronizado desde localStorage');
+    }
+  };
+
+  const clearState = () => {
+    setState(initialState);
+    localStorage.removeItem('simple-demo-state');
+    setErrorMessage('');
+    console.log('Estado limpiado');
   };
 
   return {
@@ -67,6 +73,8 @@ export const useSimpleDemo = () => {
     errorMessage,
     updateState,
     handleError,
-    clearError
+    clearError,
+    resyncState,
+    clearState
   };
 }; 
