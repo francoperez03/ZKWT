@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Identity } from "@semaphore-protocol/identity";
-import { Group } from "@semaphore-protocol/group";
-import { generateProof, verifyProof } from "@semaphore-protocol/proof";
 import { useGroups } from '../hooks/useGroups';
 
 interface ProofData {
@@ -17,15 +15,15 @@ interface ProofData {
 export function ProofGenerator() {
   const { groups, identities } = useGroups();
   // Identidad temporal para generar pruebas (en producción necesitarías la clave privada real)
-  const [identity, setIdentity] = useState<Identity | null>(null);
+  const [, setIdentity] = useState<Identity | null>(null);
   // ID de la identidad seleccionada del storage
   const [selectedIdentityId, setSelectedIdentityId] = useState<string>("");
   const [groupId, setGroupId] = useState<string>("");
   const [signal, setSignal] = useState("Hello ZK World!");
   const [externalNullifier, setExternalNullifier] = useState("voting-round-1");
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isGenerating, ] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [proofData, setProofData] = useState<ProofData | null>(null);
+  const [proofData, ] = useState<ProofData | null>(null);
   const [verificationResult, setVerificationResult] = useState<boolean | null>(null);
 
   const selectIdentity = (identityId: string) => {
@@ -51,67 +49,67 @@ export function ProofGenerator() {
     }
   };
 
-  const generateZKProof = async () => {
-    if (!selectedIdentityId || !groupId) return;
+  // const generateZKProof = async () => {
+  //   if (!selectedIdentityId || !groupId) return;
 
-    setIsGenerating(true);
-    setVerificationResult(null);
+  //   setIsGenerating(true);
+  //   setVerificationResult(null);
 
-    try {
-      const selectedIdentity = identities[selectedIdentityId];
-      const group = groups[groupId];
+  //   try {
+  //     const selectedIdentity = identities[selectedIdentityId];
+  //     const group = groups[groupId];
       
-      if (!selectedIdentity || !group) {
-        alert("⚠️ Identidad o grupo no encontrado.");
-        setIsGenerating(false);
-        return;
-      }
+  //     if (!selectedIdentity || !group) {
+  //       alert("⚠️ Identidad o grupo no encontrado.");
+  //       setIsGenerating(false);
+  //       return;
+  //     }
 
-      // Verificar que la identidad esté en el grupo usando el commitment almacenado
-      if (!group.members.includes(selectedIdentity.commitment)) {
-        alert("⚠️ Tu identidad no pertenece al grupo seleccionado. Únete al grupo primero.");
-        setIsGenerating(false);
-        return;
-      }
+  //     // Verificar que la identidad esté en el grupo usando el commitment almacenado
+  //     if (!group.members.includes(selectedIdentity.commitment)) {
+  //       alert("⚠️ Tu identidad no pertenece al grupo seleccionado. Únete al grupo primero.");
+  //       setIsGenerating(false);
+  //       return;
+  //     }
 
-      // Recrear el grupo con los miembros actuales
-      const semaphoreGroup = new Group(group.members.map(BigInt));
+  //     // Recrear el grupo con los miembros actuales
+  //     const semaphoreGroup = new Group(group.members.map(BigInt));
       
-      // Para la demo, usamos la identidad temporal creada
-      // En producción, necesitarías recuperar la clave privada de forma segura
-      if (!identity) {
-        alert("⚠️ Error: Identidad no inicializada.");
-        setIsGenerating(false);
-        return;
-      }
+  //     // Para la demo, usamos la identidad temporal creada
+  //     // En producción, necesitarías recuperar la clave privada de forma segura
+  //     if (!identity) {
+  //       alert("⚠️ Error: Identidad no inicializada.");
+  //       setIsGenerating(false);
+  //       return;
+  //     }
       
-      // Generar la prueba usando @semaphore-noir/proof
-      const fullProof = await generateProof(
-        identity,
-        semaphoreGroup,
-        externalNullifier,
-        signal
-      );
+  //     // Generar la prueba usando @semaphore-noir/proof
+  //     const fullProof = await generateProof(
+  //       identity,
+  //       semaphoreGroup,
+  //       externalNullifier,
+  //       signal
+  //     );
 
-      const proofResult: ProofData = {
-        proof: fullProof.proof,
-        publicSignals: fullProof.publicSignals,
-        externalNullifier,
-        signal,
-        groupId,
-        groupName: group.name
-      };
+  //     const proofResult: ProofData = {
+  //       proof: fullProof.proof,
+  //       publicSignals: fullProof.publicSignals,
+  //       externalNullifier,
+  //       signal,
+  //       groupId,
+  //       groupName: group.name
+  //     };
 
-      setProofData(proofResult);
-      alert("🎉 ¡Prueba zero-knowledge generada exitosamente!");
+  //     setProofData(proofResult);
+  //     alert("🎉 ¡Prueba zero-knowledge generada exitosamente!");
 
-    } catch (error) {
-      console.error("Error generating proof:", error);
-      alert("❌ Error al generar la prueba. Verifica que tu identidad esté en el grupo.");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error generating proof:", error);
+  //     alert("❌ Error al generar la prueba. Verifica que tu identidad esté en el grupo.");
+  //   } finally {
+  //     setIsGenerating(false);
+  //   }
+  // };
 
   const verifyZKProof = async () => {
     if (!proofData) return;
@@ -119,17 +117,17 @@ export function ProofGenerator() {
     setIsVerifying(true);
 
     try {
-      const group = groups[proofData.groupId];
-      const treeDepth = group.depth;
+      // const group = groups[proofData.groupId];
+      // // const treeDepth = group.depth;
       
-      const isValid = await verifyProof(proofData, treeDepth);
-      setVerificationResult(isValid);
+      // // const isValid = await verifyProof(proofData, treeDepth);
+      // // setVerificationResult(isValid);
 
-      if (isValid) {
-        alert("✅ ¡Prueba verificada exitosamente! La prueba es válida.");
-      } else {
-        alert("❌ La prueba no es válida.");
-      }
+      // if (isValid) {
+      //   alert("✅ ¡Prueba verificada exitosamente! La prueba es válida.");
+      // } else {
+      //   alert("❌ La prueba no es válida.");
+      // }
 
     } catch (error) {
       console.error("Error verifying proof:", error);
@@ -319,7 +317,7 @@ export function ProofGenerator() {
               <button
                 className="w-full px-6 py-4 bg-orange-600 text-white font-semibold rounded-xl hover:bg-orange-700 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center space-x-3"
                 disabled={!selectedIdentityId || !groupId || !signal.trim() || !externalNullifier.trim() || isGenerating}
-                onClick={generateZKProof}
+                onClick={() => {}}
               >
                 {isGenerating ? (
                   <>

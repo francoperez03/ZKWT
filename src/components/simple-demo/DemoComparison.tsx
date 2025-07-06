@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import SimpleDemo from '../SimpleDemo';
 import SimpleDemoRefactored from './SimpleDemoRefactored';
 
 const DemoComparison: React.FC = () => {
@@ -50,11 +49,7 @@ const DemoComparison: React.FC = () => {
 
       {/* Contenido */}
       <div className="py-6">
-        {activeVersion === 'refactored' ? (
-          <SimpleDemoRefactored />
-        ) : (
-          <SimpleDemo />
-        )}
+        <SimpleDemoRefactored />
       </div>
     </div>
   );
