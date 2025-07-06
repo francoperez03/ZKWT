@@ -5,6 +5,7 @@ import {
   GroupManager, 
   IdentityManager, 
   MembershipManager, 
+  ProofGenerator,
   SimpleDemoRefactored
 } from './components';
 import { GroupProvider } from './components/GroupProvider';
@@ -37,34 +38,34 @@ function AppContent() {
       color: 'indigo',
       description: 'Vista general del sistema'
     },
-    {
-      id: 'groups',
-      name: 'Gestor de Grupos',
-      icon: '👥',
-      color: 'green',
-      description: 'Crear y administrar grupos'
-    },
-    {
-      id: 'identities',
-      name: 'Gestor de Identidades',
-      icon: '🔐',
-      color: 'purple',
-      description: 'Crear identidades anónimas'
-    },
-    {
-      id: 'memberships',
-      name: 'Gestor de Membresías',
-      icon: '🔗',
-      color: 'blue',
-      description: 'Conectar identidades con grupos'
-    },
-    {
-      id: 'proofs',
-      name: 'Generador de Pruebas',
-      icon: '⚡',
-      color: 'orange',
-      description: 'Crear pruebas zero-knowledge'
-    },
+    // {
+    //   id: 'groups',
+    //   name: 'Gestor de Grupos',
+    //   icon: '👥',
+    //   color: 'green',
+    //   description: 'Crear y administrar grupos'
+    // },
+    // {
+    //   id: 'identities',
+    //   name: 'Gestor de Identidades',
+    //   icon: '🔐',
+    //   color: 'purple',
+    //   description: 'Crear identidades anónimas'
+    // },
+    // {
+    //   id: 'memberships',
+    //   name: 'Gestor de Membresías',
+    //   icon: '🔗',
+    //   color: 'blue',
+    //   description: 'Conectar identidades con grupos'
+    // },
+    // {
+    //   id: 'proofs',
+    //   name: 'Generador de Pruebas',
+    //   icon: '⚡',
+    //   color: 'orange',
+    //   description: 'Crear pruebas zero-knowledge'
+    // },
   ];
 
   const renderActiveComponent = () => {
@@ -77,6 +78,8 @@ function AppContent() {
         return <IdentityManager />;
       case 'memberships':
         return <MembershipManager />;
+      case 'proofs':
+        return <ProofGenerator />;
       case 'simple':
         return <SimpleDemoRefactored />;
       default:
@@ -109,7 +112,7 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -154,19 +157,21 @@ function AppContent() {
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="w-full"
-          >
-            {renderActiveComponent()}
-          </motion.div>
-        </AnimatePresence>
+      <main className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="w-full"
+            >
+              {renderActiveComponent()}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </main>
 
       {/* Footer */}
@@ -174,7 +179,7 @@ function AppContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <p className="text-sm text-gray-500">
-              Demo educativo del protocolo Semaphore • Desarrollado para EkoParty 2024
+              Demo educativo del protocolo Semaphore • Desarrollado para EkoParty 2025
             </p>
             <div className="mt-4 flex justify-center space-x-6 text-xs text-gray-400">
               <span>🔐 Zero-Knowledge Proofs</span>
