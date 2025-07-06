@@ -141,14 +141,6 @@ Valores criptográficos que representan una identidad sin revelar información p
 ### Merkle Trees
 Estructuras de datos que permiten verificación eficiente de pertenencia a grupos.
 
-## 🎓 Para Instructores
-
-### Puntos Clave a Enseñar
-1. **Privacidad vs Anonimato**: Diferencias conceptuales
-2. **Criptografía aplicada**: Uso práctico de primitivas criptográficas
-3. **Arquitectura de software**: Comparación entre enfoques monolíticos y modulares
-4. **Debugging**: Técnicas para identificar y resolver problemas
-
 ### Ejercicios Sugeridos
 1. Crear diferentes tipos de grupos y probar membresía
 2. Experimentar con diferentes signals y nullifiers
@@ -158,22 +150,6 @@ Estructuras de datos que permiten verificación eficiente de pertenencia a grupo
 ## 📄 Licencia
 
 Este proyecto es de código abierto y está disponible bajo la licencia MIT.
-
-## 🤝 Contribuciones
-
-Las contribuciones son bienvenidas. Para contribuir:
-1. Fork el proyecto
-2. Crea una rama para tu feature
-3. Commit tus cambios
-4. Push a la rama
-5. Abre un Pull Request
-
-## 📞 Soporte
-
-Para preguntas sobre el workshop o problemas técnicos, consulta:
-- Issues del repositorio
-- Documentación de Semaphore Protocol
-- Comunidad EKOParty
 
 ---
 
