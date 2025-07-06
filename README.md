@@ -2,7 +2,7 @@
 
 ## 📋 Descripción
 
-**ZKWT** es una herramienta educativa desarrollada para la **EKOParty** que demuestra los conceptos fundamentales de las **pruebas de conocimiento cero (Zero-Knowledge Proofs)** usando el protocolo **Semaphore**.
+**ZKWT** es una herramienta educativa que demuestra los conceptos fundamentales de las **pruebas de conocimiento cero (Zero-Knowledge Proofs)** usando el protocolo **Semaphore**.
 
 Este proyecto permite a los usuarios experimentar con la creación de identidades anónimas, grupos criptográficos y la generación de pruebas ZK de manera interactiva y educativa.
 

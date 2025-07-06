@@ -179,7 +179,7 @@ function AppContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <p className="text-sm text-gray-500">
-              Demo educativo del protocolo Semaphore • Desarrollado para EkoParty 2025
+              Demo educativo del protocolo Semaphore
             </p>
             <div className="mt-4 flex justify-center space-x-6 text-xs text-gray-400">
               <span>🔐 Zero-Knowledge Proofs</span>
