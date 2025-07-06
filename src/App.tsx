@@ -31,13 +31,13 @@ function AppContent() {
       color: 'red',
       description: 'Flujo completo simplificado'
     },
-    {
-      id: 'dashboard',
-      name: 'Panel de Control',
-      icon: '📊',
-      color: 'indigo',
-      description: 'Vista general del sistema'
-    },
+    // {
+    //   id: 'dashboard',
+    //   name: 'Panel de Control',
+    //   icon: '📊',
+    //   color: 'indigo',
+    //   description: 'Vista general del sistema'
+    // },
     // {
     //   id: 'groups',
     //   name: 'Gestor de Grupos',
